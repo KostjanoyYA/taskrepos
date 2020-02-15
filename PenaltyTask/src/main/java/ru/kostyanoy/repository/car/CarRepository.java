@@ -1,4 +1,4 @@
-package ru.kostyanoy.repository.book;
+package ru.kostyanoy.repository.car;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -7,7 +7,7 @@ import ru.kostyanoy.entity.Car;
 
 import java.util.List;
 
-public interface BookRepository extends JpaRepository<Car, Long> {
+public interface CarRepository extends JpaRepository<Car, Long> {
 
     String GET_QUERY =
             "select b " +

@@ -7,14 +7,16 @@ import lombok.Value;
 
 @Value
 @Builder(builderClassName = "Builder", toBuilder = true)
-@JsonDeserialize(builder = AuthorDto.Builder.class)
-public class AuthorDto {
+@JsonDeserialize(builder = StatisticsDto.Builder.class)
+public class StatisticsDto {
 
-    private final Long id;
+    private final Long fineID;
 
-    private final String name;
+    private final String fineType;
 
-    private final String description;
+    private final Long topPlace;
+
+    private final Long occurrencesNumber;
 
     @JsonPOJOBuilder(withPrefix = "")
     public static class Builder {

@@ -84,9 +84,6 @@ const sendRequest = (options) => {
 	});
 };
 
-//getFullName не требуется. Каждое поле посылается отдельно
-//Пример
-//http://localhost:8080/penaltyevents?firstName=Jordan&middleName=Ross&lastName=Belfort&fullStateNumber=""
 const getFullName = () => {
 	return penaltyFormIds.reduce((acc, key) => {
 		const value = document.getElementById(key).value;
@@ -98,14 +95,6 @@ const getFullName = () => {
 	}, {});
 };
 
-// Для унификации я предполагал, что пользователь вводит номер единой строкой. Сервер распарсит номер в соответствии с
-// региональной настройкой или другой логикой. Нужно одно поле для номера.
-// Единстеввное, нужно сделать запись-подсказку под полем ввода, что номер и код региона номеров РФ вводить в виде
-// трёхзначных чисел т.е. не 1, а 001. Не 75, а 075.
-// Дописывать rus не надо, пусть пользователь вводит страну, т.к. в теории на территории РФ могу ездить иностранные автомобили.
-// Пример рабочего запроса
-// http://localhost:8080/penaltyevents?firstName=&middleName=&lastName=&fullStateNumber=M402MM075rus
-// Регистр вномере не имеет значения
 const getStateNumber = () => {
 	const fullStateNumber = document.getElementById('stateNumber').value;
 
@@ -165,7 +154,7 @@ function onPenaltyClick () {
 	sendRequest({
 		path: apiMethods.penaltyEvents,
 		queryParams: {
-			...fullName, //надо имена засылать отдельными параметрами
+			...fullName,
 			...fullStateNumber
 		}
 	}).then(renderPenaltyTable, renderError);
@@ -178,19 +167,4 @@ function onStatisticClick () {
 	sendRequest({
 		path: `${apiMethods.statistics}/${count}`
 	}).then(renderStatisticTable, renderError);
-}
-
-exampleResp = [
-	{
-		"penaltyEventID":9,
-		"penaltyEventTimeStamp":"2020-01-01 07:00:00",
-		"fineType":"fineType test record",
-		"fineCharge":500.00,
-		"carMake":"carMake test record",
-		"carModel":"carModel test record",
-		"fullStateNumber":"X806XX117RUS",
-		"firstName":"firstName test record",
-		"middleName":"middleName test record",
-		"lastName":"lastName test record"
-	}
-];
+};

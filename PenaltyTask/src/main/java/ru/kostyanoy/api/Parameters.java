@@ -5,9 +5,13 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 class Parameters {
 
-    static final String AUTHOR_NAME = "authorName";
+    static final String FIRST_NAME = "firstName";
 
-    static final String NAME = "name";
+    static final String MIDDLE_NAME = "middleName";
 
-    static final String ID = "id";
+    static final String LAST_NAME = "lastName";
+
+    static final String FULL_STATE_NUMBER = "fullStateNumber";
+
+    static final String TOP = "top";
 }

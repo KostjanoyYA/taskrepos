@@ -5,9 +5,9 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 class Paths {
 
-    static final String AUTHORS = "/authors";
+    static final String STATISTICS = "/statistics";
 
-    static final String BOOKS = "/books";
+    static final String PENALTYEVENTS = "/penaltyevents";
 
-    static final String ID = "/{id}";
+    static final String TOP = "/{top}";
 }

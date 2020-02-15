@@ -7,4 +7,4 @@ spring:
     username: pdbs
     password: 1
     hikari:
-      maximum-pool-size: 10
+      maximumPoolSize: 10
