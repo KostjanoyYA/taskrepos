@@ -11,14 +11,7 @@
             <p>Фамилия: <input type="text" size="25" id="lastName"></p>
             <p>Имя: <input type="text" size="25" id="firstName"></p>
             <p>Отчество/Второе имя: <input type="text" size="25" id="middleName"></p>
-            <div>Гос. номер авто:
-                <div class="stateNumber">
-                    <input style="position: relative" type="text" maxlength="1" size="1" placeholder="x" id="firstLetter">
-                    <input style="position: relative" type="number" min="0" max="999" placeholder="999" id="numbers">
-                    <input style="position: relative" type="text" maxlength="2" size="2" placeholder="xx" id="secondLetters">
-                    <input style="position: relative" type="number" min="0" max="999" placeholder="99" id="region"> rus //Регион РФ в номере может быть трёхзначным
-                 </div>
-            </div>
+            <p>Гос. номер авто: <input type="text" size="25" id="stateNumber"></p>
             <p>
                 <button class="submitButton" onclick="onPenaltyClick()">Найти штрафы</button>
                 <button class="submitButton" onclick="flushForm()">Очистить</button>

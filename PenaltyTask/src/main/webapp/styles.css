@@ -43,16 +43,6 @@ th, td {
     font-size: 30px;
 }
 
-.stateNumber {
-    display: inline;
-    position: absolute;
-    right: 0;
-}
-
-.stateNumber > input {
-    text-align: center;
-}
-
 .submitButton {
     position: relative;
     right: 0;

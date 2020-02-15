@@ -4,13 +4,6 @@ const penaltyFormIds = [
 	'middleName',
 ];
 
-const stateNumberFormIds = [
-	'firstLetter',
-	'numbers',
-	'secondLetters',
-	'region',
-];
-
 const serverUrl = 'http://localhost';
 const serverPort = '8080';
 const apiMethods = {
@@ -34,7 +27,7 @@ const penaltyTableCellOrder = [
 const statisticTableCellOrder = [
 	'topPlace',
 	'occurrencesNumber',
-	'fineType',	
+	'fineType',
 	'fineID',
 ];
 
@@ -70,7 +63,7 @@ const createPenaltyTableHeader = () => createPenaltyTableRow({
 const createStatisticTableRow = (data, opt_isHeader) => createTableRow(data, statisticTableCellOrder, opt_isHeader);
 const createStatisticTableHeader = () => createStatisticTableRow({
 	topPlace: 'Место top штрафа',
-	occurrencesNumber: 'Количество упоминаний',	
+	occurrencesNumber: 'Количество упоминаний',
 	fineType: 'Тип штрафа',
 	fineID: 'id штрафа',
 }, true);
@@ -82,7 +75,13 @@ const sendRequest = (options) => {
 		`${encodeURIComponent(key)}=${encodeURIComponent(queryParams[key])}`).join('&')}` : null;
 	const fullPath = `${serverUrl}${serverPort ? ':' + serverPort : ''}/${path}${stringParams ? `?${stringParams}` : ''}`;
 
-	return fetch(fullPath).then(response => response.json());
+	return fetch(fullPath).then(response => {
+		if (response.status > 200) {
+			return Promise.reject(response);
+		}
+
+		return response.json();
+	});
 };
 
 //getFullName не требуется. Каждое поле посылается отдельно
@@ -107,20 +106,15 @@ const getFullName = () => {
 // Пример рабочего запроса
 // http://localhost:8080/penaltyevents?firstName=&middleName=&lastName=&fullStateNumber=M402MM075rus
 // Регистр вномере не имеет значения
-const getFullStateNumber = () => {
-	const fullStateNumber = stateNumberFormIds.reduce((acc, key) => {
-		const formValue = document.getElementById(key).value;
-		const resultValue = key === 'region' && formValue.length ? `${formValue}rus` : formValue;
-		acc.push(resultValue);
-		return acc;
-	}, []).join('');
+const getStateNumber = () => {
+	const fullStateNumber = document.getElementById('stateNumber').value;
 
 	return fullStateNumber.length ? { fullStateNumber } : {};
 };
 
 
 function flushForm () {
-	[...penaltyFormIds,...stateNumberFormIds, 'statisticCount'].forEach(key => document.getElementById(key).value = '');
+	[...penaltyFormIds, 'stateNumber', 'statisticCount'].forEach(key => document.getElementById(key).value = '');
 	flushTable();
 }
 
@@ -136,13 +130,12 @@ const renderError = (err) => {
 	const tableElement = document.getElementById('table');
 	const errorElement = document.createElement('td');
 	errorElement.className = 'error';
-	errorElement.innerText = `Server ERROR: ${err}`;
+	errorElement.innerText = `Server ERROR: error code: ${err.status}, ${err.statusText}`;
 	tableElement.appendChild(errorElement);
 	tableElement.style.visibility = 'visible';
 };
 
 const renderPenaltyTable = (data) => {
-	//data = exampleResp; // Забыл строку закомментить, поэтому в data присваивалось захардкоденное в конце значение.
 	const tableElement = document.getElementById('table');
 	tableElement.appendChild(createPenaltyTableHeader());
 	tableElement.style.visibility = 'visible';
@@ -166,16 +159,16 @@ const renderStatisticTable = (data) => {
 
 function onPenaltyClick () {
 	const fullName = getFullName();
-	const stateNumber = getFullStateNumber();
+	const fullStateNumber = getStateNumber();
 	flushTable();
 
 	sendRequest({
 		path: apiMethods.penaltyEvents,
 		queryParams: {
 			...fullName, //надо имена засылать отдельными параметрами
-			...stateNumber
+			...fullStateNumber
 		}
-	}).then(renderPenaltyTable, renderPenaltyTable);
+	}).then(renderPenaltyTable, renderError);
 }
 
 function onStatisticClick () {
