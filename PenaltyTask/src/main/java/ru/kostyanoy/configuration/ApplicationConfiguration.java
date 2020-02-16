@@ -2,6 +2,7 @@ package ru.kostyanoy.configuration;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -9,17 +10,17 @@ import ru.kostyanoy.entity.statenumbervalidator.StateNumberValidator;
 import ru.kostyanoy.entity.statenumbervalidator.StateNumberValidatorRus;
 
 @Configuration
-@ComponentScan(basePackages = {"ru.kostyanoy.entity.statenumbervalidator", "ru.kostyanoy.configuration"})
-//TODO Здесь не работает @EnableConfigurationProperties({DataSourceProperties.class, LocalizationProperties.class})
+@ComponentScan
+//@ComponentScan(basePackages = {"ru.kostyanoy.entity.statenumbervalidator", "ru.kostyanoy.configuration"})
 public class ApplicationConfiguration {
 
     @Bean(destroyMethod = "close")
-    public HikariDataSource dataSource(ru.kostyanoy.configuration.DataSourceProperties dataSourceProperties) {
+    public HikariDataSource dataSource(DataSourceProperties dataSourceProperties) {
         HikariConfig config = new HikariConfig();
         config.setJdbcUrl(dataSourceProperties.getUrl());
         config.setUsername(dataSourceProperties.getUsername());
         config.setPassword(dataSourceProperties.getPassword());
-        config.setMaximumPoolSize(dataSourceProperties.getMaximumPoolSize());
+        //TODO config.setMaximumPoolSize(dataSourceProperties.getMaximumPoolSize());
         config.setDriverClassName("org.postgresql.Driver");
 
         return new HikariDataSource(config);

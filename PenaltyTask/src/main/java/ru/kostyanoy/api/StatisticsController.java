@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.kostyanoy.api.dto.StatisticsDto;
 import ru.kostyanoy.service.statistics.StatisticsService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(path = Paths.STATISTICS, produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
@@ -17,7 +19,7 @@ public class StatisticsController {
     private final StatisticsService statisticsService;
 
     @GetMapping(path = Paths.TOP)
-    public StatisticsDto getById(@PathVariable(name = Parameters.TOP) Long top) {
+    public List<StatisticsDto> getById(@PathVariable(name = Parameters.TOP) Long top) {
         return statisticsService.getByTop(top);
     }
 }

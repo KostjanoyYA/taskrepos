@@ -2,16 +2,23 @@ package ru.kostyanoy.entity;
 
 import lombok.Data;
 
-@Data
-//@Entity
-public class Statistics {
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 
-    //@OneToOne
-    //@JoinColumn(name = "fineID")
+@Data
+@Entity
+public class Statistics { //TODO добавить первичный ключ https://easyjava.ru/data/jpa/pervichnye-klyuchi-v-jpa/
+
+    @OneToOne
+    @JoinColumn(name = "fine_id")
     private Fine fine;
 
+    @Column(name = "model")
     private Long topPlace;
 
+    @Column(name = "model")
     private Long occurrencesNumber;
 }
 

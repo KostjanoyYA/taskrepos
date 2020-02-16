@@ -2,10 +2,10 @@ create schema if not exists pdbs;
 SET search_path TO pdbs;
 create table carOwner
 (
-    id               bigserial     not null,
-    firstName        varchar(256)  not null,
-    middleName       varchar(256)  not null,
-    lastName         varchar(256)  not null
+    id         bigserial    not null,
+    firstName  varchar(256) not null,
+    middleName varchar(256) not null,
+    lastName   varchar(256) not null
 );
 
 alter table carOwner
@@ -13,11 +13,11 @@ alter table carOwner
 
 create table stateNumber
 (
-    id              bigserial     not null,
-    country         varchar(3)	  DEFAULT 'RUS'    not null,
-    regionCode      int		      not null,
-    series          varchar(3)    not null,
-    number          int           not null
+    id         bigserial                not null,
+    country    varchar(3) DEFAULT 'RUS' not null,
+    regionCode int                      not null,
+    series     varchar(3)               not null,
+    number     int                      not null
 );
 
 alter table stateNumber
@@ -25,11 +25,11 @@ alter table stateNumber
 
 create table car
 (
-    id             bigserial     not null,
-    make           varchar(256)  not null,
-    model          varchar(256)  not null,
-    stateNumberID  bigint        not null,
-    carOwnerID     bigint        not null
+    id            bigserial    not null,
+    make          varchar(256) not null,
+    model         varchar(256) not null,
+    stateNumberID bigint       not null,
+    carOwnerID    bigint       not null
 );
 
 alter table car
@@ -44,30 +44,41 @@ alter table car
 
 create table fine
 (
-    id              bigserial      not null,
-    type            varchar        not null,
-    charge          numeric(9, 2)
+    id     bigserial not null,
+    type   varchar   not null,
+    charge numeric(9, 2)
 );
 
 alter table fine
     add constraint fine_pk primary key (id);
 
-    create table penaltyEvent
-    (
-        id              bigserial      not null,
-        eventDate       timestamp      not null,
-        fineID          bigint         not null,
-        carID           bigint         not null
-    );
+create table penaltyEvent
+(
+    id        bigserial not null,
+    eventDate timestamp not null,
+    fineID    bigint    not null,
+    carID     bigint    not null
+);
 
-    alter table penaltyEvent
-        add constraint penaltyEvent_pk primary key (id);
+alter table penaltyEvent
+    add constraint penaltyEvent_pk primary key (id);
 
-    alter table penaltyEvent
-        add constraint penaltyEvent_fine_id_fk foreign key (fineID) references fine (id);
+alter table penaltyEvent
+    add constraint penaltyEvent_fine_id_fk foreign key (fineID) references fine (id);
 
-    alter table penaltyEvent
-        add constraint penaltyEvent_car_id_fk foreign key (carID) references car (id);
+alter table penaltyEvent
+    add constraint penaltyEvent_car_id_fk foreign key (carID) references car (id);
+
+create table statistics
+(
+    fine_top_place   bigint not null,
+    fine_occurrences bigint not null default 0,
+    fine_id          bigint not null
+);
+
+alter table statistics
+    add constraint statistics_fine_id_fk foreign key (fine_id) references fine (id);
+
 
 --Table fulfilment
 
@@ -94,19 +105,19 @@ VALUES ('Resistance to a traffic police officer', 150000);
 
 --------------------------------------------------------------------
 
-INSERT INTO carOwner (firstName, middleName,lastName)
+INSERT INTO carOwner (firstName, middleName, lastName)
 VALUES ('JORDAN', 'ROSS', 'BELFORT');
 
-INSERT INTO carOwner (firstName, middleName,lastName)
+INSERT INTO carOwner (firstName, middleName, lastName)
 VALUES ('IPPOLIT', 'GEORGIEVICH', 'YAKOVLEV');
 
-INSERT INTO carOwner (firstName, middleName,lastName)
+INSERT INTO carOwner (firstName, middleName, lastName)
 VALUES ('FLASH', 'BLITZ', 'SLOTHMORE');
 
-INSERT INTO carOwner (firstName, middleName,lastName)
+INSERT INTO carOwner (firstName, middleName, lastName)
 VALUES ('BEN', 'FANTASTIC', 'CASH');
 
-INSERT INTO carOwner (firstName, middleName,lastName)
+INSERT INTO carOwner (firstName, middleName, lastName)
 VALUES ('NIKOLAY', 'EVGRAFOVICH', 'PETROV');
 
 --------------------------------------------------------------------
@@ -217,3 +228,25 @@ VALUES ('2020-01-03 15:15:00', 2, 2);
 INSERT INTO penaltyEvent (eventDate, fineID, carID)
 VALUES ('2020-01-15 12:10:10', 6, 4);
 
+--
+--INSERT INTO penaltyEvent (eventDate, fineID, carID)
+--VALUES ('2020-02-16 00:05:25', 3, 1);
+
+-- UPDATE penaltyEvent
+-- SET fineID = 4
+-- WHERE eventDate = '2020-02-16 00:05:25';
+
+-- DELETE FROM penaltyEvent
+-- WHERE eventDate='2020-02-16 00:05:25';
+
+-- INSERT INTO fine (type, charge)
+-- VALUES ('Tinted car windows', 999);
+
+-- DELETE FROM fine
+-- WHERE type = 'Tinted car windows';
+
+-- INSERT INTO fine (type, charge)
+-- VALUES ('Unreadable state number', 777);
+
+-- DELETE FROM fine
+-- WHERE type = 'Unreadable state number';

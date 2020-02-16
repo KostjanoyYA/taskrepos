@@ -8,3 +8,6 @@ spring:
     password: 1
     hikari:
       maximumPoolSize: 10
+
+localization:
+  statenumbervalidator: rus

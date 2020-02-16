@@ -2,12 +2,14 @@ package ru.kostyanoy;
 
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import ru.kostyanoy.configuration.LocalizationProperties;
 
 @SpringBootApplication
-@EnableConfigurationProperties({ru.kostyanoy.configuration.DataSourceProperties.class, LocalizationProperties.class})
+@EnableConfigurationProperties({DataSourceProperties.class, LocalizationProperties.class})
+//TODO @EnableConfigurationProperties({ru.kostyanoy.configuration.DataSourceProperties.class, LocalizationProperties.class})
 public class PenaltyWebApplication {
 
     public static void main(String[] args) {
