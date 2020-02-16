@@ -3,7 +3,6 @@ package ru.kostyanoy.repository.statistics;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import ru.kostyanoy.entity.PenaltyEvent;
 import ru.kostyanoy.entity.Statistics;
 
 import java.util.List;
@@ -60,5 +59,5 @@ public interface StatisticsRepository extends JpaRepository<Statistics, Long> {
                     "ORDER BY temp_rang_table.fine_top_place ASC;";
 
     @Query(value = DROP_TEMP_TABLES_QUERY + CREATE_TEMP_TABLES_QUERY, nativeQuery = true)
-    List<PenaltyEvent> getByTop(@Param("top") Long top);
+    List<Statistics> getByTop(@Param("top") Long top);
 }

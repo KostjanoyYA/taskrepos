@@ -4,10 +4,10 @@ import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import ru.kostyanoy.configuration.DataSourceProperties;
+import ru.kostyanoy.configuration.LocalizationProperties;
 
 @SpringBootApplication
-@EnableConfigurationProperties(DataSourceProperties.class)
+@EnableConfigurationProperties({ru.kostyanoy.configuration.DataSourceProperties.class, LocalizationProperties.class})
 public class PenaltyWebApplication {
 
     public static void main(String[] args) {

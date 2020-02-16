@@ -19,16 +19,14 @@ public final class Validator {
         }
     }
 
-    public static void checkSize(String parameterName, String value, int minSize, int maxSize) {
+    public static void checkPositive(String parameterName, Long value) {
         checkNotNull(parameterName, value);
-
-        if (value.length() < minSize || value.length() > maxSize) {
+        if (value <= 0) {
             throw new InvalidParametersException(
                     String.format(
-                            "Parameter '%s' must contain at least %d characters and no more than %d characters",
+                            "Parameter '%s' (= %d) must have positive value",
                             parameterName,
-                            minSize,
-                            maxSize
+                            value
                     )
             );
         }

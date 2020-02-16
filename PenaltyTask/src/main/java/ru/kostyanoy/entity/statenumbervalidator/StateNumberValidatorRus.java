@@ -1,7 +1,11 @@
-package ru.kostyanoy.entity;
+package ru.kostyanoy.entity.statenumbervalidator;
+
+import org.springframework.stereotype.Component;
+import ru.kostyanoy.entity.StateNumber;
 
 import java.util.Optional;
 
+@Component
 public class StateNumberValidatorRus implements StateNumberValidator {
     private final static int maxLength = 12;
     private final static int minLength = 12;

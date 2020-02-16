@@ -1,4 +1,6 @@
-package ru.kostyanoy.entity;
+package ru.kostyanoy.entity.statenumbervalidator;
+
+import ru.kostyanoy.entity.StateNumber;
 
 import java.util.Optional;
 
