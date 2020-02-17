@@ -1,38 +1,10 @@
 --TODO Delete this section
-DROP TABLE IF EXISTS temp_table;
-DROP TABLE IF EXISTS temp_count_table;
-DROP TABLE IF EXISTS temp_rang_table;
+ALTER TABLE statistics
+    ADD id bigserial not null;
 
-CREATE TEMP TABLE temp_table AS
-SELECT carOwner.lastName, carOwner.firstName, carOwner.middleName, car.make, car.model,
-       stateNumber.number, stateNumber.series, stateNumber.regionCode, stateNumber.country,
-       penaltyEvent.eventDate, fine.id as fine_id, fine.type, fine.charge
-FROM penaltyEvent
-         JOIN car ON car.id = penaltyEvent.carID
-         JOIN stateNumber ON stateNumber.id = car.stateNumberID
-         JOIN carOwner ON carOwner.id = car.carOwnerID
-         JOIN fine ON fine.id = penaltyEvent.fineID
-ORDER BY carOwner.lastName;
-
-CREATE TEMP TABLE temp_count_table AS
-SELECT temp_table.fine_id, COUNT(*) cnt
-FROM temp_table
-GROUP BY fine_id
-ORDER BY cnt DESC;
-
-CREATE TEMP TABLE temp_rang_table AS
-select * from
-    (select *, dense_rank() over (order by cnt desc) as fine_rank
-     from temp_count_table) subquery;
-
-CREATE TABLE statistics AS
-SELECT fine.id as fine_id, fine.type as fine_type,
-       fine.charge as fine_charge, temp_rang_table.fine_rank as fine_top_place, temp_rang_table.cnt as fine_occurrences
-FROM fine, temp_rang_table
-WHERE fine.id = temp_rang_table.fine_id
-ORDER BY temp_rang_table.fine_rank ASC;
-
---EndOfSection!!!
+alter table statistics
+    add constraint statistics_pk primary key (id);
+--EndofSection
 
 CREATE OR REPLACE FUNCTION calculate_statistics() RETURNS TRIGGER AS $$
     --DECLARE

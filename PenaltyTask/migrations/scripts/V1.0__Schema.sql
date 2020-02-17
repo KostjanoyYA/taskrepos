@@ -71,10 +71,14 @@ alter table penaltyEvent
 
 create table statistics
 (
-    fine_top_place   bigint not null,
-    fine_occurrences bigint not null default 0,
-    fine_id          bigint not null
+    id               bigserial not null,
+    fine_top_place   bigint    not null,
+    fine_occurrences bigint    not null default 0,
+    fine_id          bigint    not null
 );
+
+alter table statistics
+    add constraint statistics_pk primary key (id);
 
 alter table statistics
     add constraint statistics_fine_id_fk foreign key (fine_id) references fine (id);
