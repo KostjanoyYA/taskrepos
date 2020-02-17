@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
-@Table(name = "penaltyEvent")
+@Table(name = "penalty_event")
 public class PenaltyEvent {
 
     @Id
@@ -15,14 +15,14 @@ public class PenaltyEvent {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "eventDate")
+    @Column(name = "event_date")
     private LocalDateTime eventDate;
 
     @OneToOne
-    @JoinColumn(name = "fineID")
+    @JoinColumn(name = "fine_id")
     private Fine fine;
 
     @ManyToOne
-    @JoinColumn(name = "carID")
+    @JoinColumn(name = "car_id")
     private Car car;
 }

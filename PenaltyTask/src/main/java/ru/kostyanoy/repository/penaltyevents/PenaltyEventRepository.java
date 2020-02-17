@@ -11,18 +11,18 @@ public interface PenaltyEventRepository extends JpaRepository<PenaltyEvent, Long
 
     String GET_QUERY =
             "select p " +
-                    "from PenaltyEvent p" +
+                    "from PenaltyEvent p " +
                     "join fetch p.fine " +
                     "join fetch p.car ";
     String GET_BY_OWNER_NAME_QUERY =
             GET_QUERY +
-                    " where lower(p.car.carowner.lastName) like lower(concat('%', :lastName, '%')) " +
-                    "  and lower(p.car.carowner.firstName) like lower(concat('%', :firstName, '%'))" +
-                    "  and lower(p.car.carowner.middleName) like lower(concat('%', :middleName, '%'))";
+                    " where lower(p.car.carOwner.lastName) like lower(concat('%', :lastName, '%'))" +
+                    " and lower(p.car.carOwner.firstName) like lower(concat('%', :firstName, '%'))" +
+                    " and lower(p.car.carOwner.middleName) like lower(concat('%', :middleName, '%'))";
 
     String GET_BY_STATENUMBER_QUERY =
             GET_QUERY +
-                    " where p.car.statenumber.id = :stateNumberID";
+                    " where p.car.stateNumber.id = :stateNumberID";
 
     @Query(value = GET_BY_STATENUMBER_QUERY)
     List<PenaltyEvent> find(@Param("stateNumberID") Long stateNumberID);

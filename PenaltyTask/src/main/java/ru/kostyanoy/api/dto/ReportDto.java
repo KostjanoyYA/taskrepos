@@ -38,5 +38,4 @@ public class ReportDto {
     @JsonPOJOBuilder(withPrefix = "")
     public static class Builder {
     }
-    //TODO Если дата будет сериализоваться неправильно, то надо в билдере указать аннотацию, как на penaltyEventTimeStamp
 }

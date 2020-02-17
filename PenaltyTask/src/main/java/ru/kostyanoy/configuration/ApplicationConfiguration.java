@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import ru.kostyanoy.entity.statenumbervalidator.StateNumberValidator;
 import ru.kostyanoy.entity.statenumbervalidator.StateNumberValidatorRus;
 
@@ -20,13 +21,13 @@ public class ApplicationConfiguration {
         config.setJdbcUrl(dataSourceProperties.getUrl());
         config.setUsername(dataSourceProperties.getUsername());
         config.setPassword(dataSourceProperties.getPassword());
-        //TODO config.setMaximumPoolSize(dataSourceProperties.getMaximumPoolSize());
         config.setDriverClassName("org.postgresql.Driver");
 
         return new HikariDataSource(config);
     }
 
     @Bean
+    @Primary
     public StateNumberValidator getValidator(ru.kostyanoy.configuration.LocalizationProperties localizationProperties) {
         String property = localizationProperties.getStateNumberValidator();
         if (property.equals("rus")) {

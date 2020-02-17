@@ -8,3 +8,4 @@ CREATE DATABASE penaltydb
     OWNER = pdbs
     ENCODING = 'UTF8'
     CONNECTION LIMIT = -1;
+

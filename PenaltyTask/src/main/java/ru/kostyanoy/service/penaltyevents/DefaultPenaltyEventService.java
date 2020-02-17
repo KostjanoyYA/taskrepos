@@ -1,6 +1,8 @@
 package ru.kostyanoy.service.penaltyevents;
 
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kostyanoy.api.dto.ReportDto;
@@ -59,11 +61,13 @@ public class DefaultPenaltyEventService implements PenaltyEventService {
                 .collect(Collectors.toList());
     }
 
+    private static final Logger log = LoggerFactory.getLogger(DefaultPenaltyEventService.class);
+
     private Optional<StateNumber> getStateNumber(String fullStateNumber) {
         StateNumber stateNumber = new StateNumber();
         if (stateNumber.setStateNumber(fullStateNumber)) {
             checkNull("stateNumberID", stateNumber.getId());
-            return stateNumberRepository.findStateNumberByCountryIgnoreCaseAndRegionCodeAndSeriesIgnoreCaseAndNumber(
+            return stateNumberRepository.find(
                     stateNumber.getCountry(),
                     stateNumber.getRegionCode(),
                     stateNumber.getSeries(),

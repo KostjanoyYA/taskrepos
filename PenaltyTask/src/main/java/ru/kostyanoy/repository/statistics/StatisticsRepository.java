@@ -11,12 +11,12 @@ public interface StatisticsRepository extends JpaRepository<Statistics, Long> {
 
     String GET_QUERY =
             "select s " +
-                    "from Statistics s" +
+                    "from Statistics s " +
                     "join fetch s.fine ";
 
     String GET_BY_TOP_QUERY =
             GET_QUERY +
-                    " where s.fine_top_place >= :top";
+                    " where s.topPlace <= :top";
 
     @Query(value = GET_BY_TOP_QUERY)
     List<Statistics> getByTop(@Param("top") Long top);

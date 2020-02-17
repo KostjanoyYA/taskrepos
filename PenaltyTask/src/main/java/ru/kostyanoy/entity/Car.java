@@ -21,10 +21,10 @@ public class Car {
     private String model;
 
     @OneToOne
-    @JoinColumn(name = "stateNumberID")
+    @JoinColumn(name = "state_number_id")
     private StateNumber stateNumber;
 
     @ManyToOne
-    @JoinColumn(name = "carOwnerID")
+    @JoinColumn(name = "car_owner_id")
     private CarOwner carOwner;
 }

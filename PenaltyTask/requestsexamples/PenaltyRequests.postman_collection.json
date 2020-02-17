@@ -6,26 +6,6 @@
 	},
 	"item": [
 		{
-			"name": "DELETE/penaltyevents/ById",
-			"request": {
-				"method": "DELETE",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8080/penaltyevents/23",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"penaltyevents",
-						"23"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "GET/penaltyevents/ByName",
 			"request": {
 				"method": "GET",
@@ -100,26 +80,6 @@
 			"response": []
 		},
 		{
-			"name": "GET/penaltyevents/ByID",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8080/penaltyevents/2",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"penaltyevents",
-						"2"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "GET/statistics/ByTop",
 			"request": {
 				"method": "GET",
@@ -134,67 +94,6 @@
 					"path": [
 						"statistics",
 						"5"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "POST/penaltyevents",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"name": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"timeStamp\": \"2020-01-07 00:00:00\",\r\n    \"carID\": 2,\r\n    \"fineID\": 6\r\n}\r\n"
-				},
-				"url": {
-					"raw": "http://localhost:8080/penaltyevents",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"penaltyevents"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "PUT/penaltyevents",
-			"request": {
-				"method": "PUT",
-				"header": [
-					{
-						"key": "Content-Type",
-						"name": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"timeStamp\": \"2020-01-07 00:10:00\",\r\n    \"carID\": 2,\r\n    \"fineID\": 6\r\n}\r\n"
-				},
-				"url": {
-					"raw": "http://localhost:8080/penaltyevents/1",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"penaltyevents",
-						"1"
 					]
 				}
 			},
