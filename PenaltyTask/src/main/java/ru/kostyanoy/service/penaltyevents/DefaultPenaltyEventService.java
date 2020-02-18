@@ -1,16 +1,15 @@
 package ru.kostyanoy.service.penaltyevents;
 
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.kostyanoy.api.dto.ReportDto;
+import ru.kostyanoy.api.dto.PenaltyEventDto;
 import ru.kostyanoy.entity.PenaltyEvent;
 import ru.kostyanoy.entity.StateNumber;
+import ru.kostyanoy.entity.statenumbervalidator.StateNumberValidator;
 import ru.kostyanoy.exception.InvalidParametersException;
 import ru.kostyanoy.exception.ObjectNotFoundException;
-import ru.kostyanoy.mapper.ReportMapper;
+import ru.kostyanoy.mapper.PenaltyEventMapper;
 import ru.kostyanoy.repository.penaltyevents.PenaltyEventRepository;
 import ru.kostyanoy.repository.statenumber.StateNumberRepository;
 
@@ -30,20 +29,22 @@ public class DefaultPenaltyEventService implements PenaltyEventService {
 
     private final StateNumberRepository stateNumberRepository;
 
-    private final ReportMapper reportMapper;
+    private final PenaltyEventMapper penaltyEventMapper;
+
+    private final StateNumberValidator validator;
 
     @Override
     @Transactional(readOnly = true)
-    public List<ReportDto> get(String firstName, String middleName, String lastName, String fullStateNumber) {
+    public List<PenaltyEventDto> get(String firstName, String middleName, String lastName, String fullStateNumber) {
         Optional<StateNumber> newStateNumber = getStateNumber(fullStateNumber);
         if (newStateNumber.isPresent()) {
             List<PenaltyEvent> penaltyEvents = penaltyEventRepository.find(newStateNumber.get().getId());
 
             return (penaltyEvents == null || penaltyEvents.isEmpty())
-                    ? new ArrayList<ReportDto>()
+                    ? new ArrayList<PenaltyEventDto>()
                     : penaltyEvents
                     .stream()
-                    .map(reportMapper::toDto)
+                    .map(penaltyEventMapper::toDto)
                     .collect(Collectors.toList());
         }
 
@@ -57,21 +58,20 @@ public class DefaultPenaltyEventService implements PenaltyEventService {
 
         return getPenaltyEventsByOwnerName(firstName, middleName, lastName)
                 .stream()
-                .map(reportMapper::toDto)
+                .map(penaltyEventMapper::toDto)
                 .collect(Collectors.toList());
     }
 
-    private static final Logger log = LoggerFactory.getLogger(DefaultPenaltyEventService.class);
-
     private Optional<StateNumber> getStateNumber(String fullStateNumber) {
-        StateNumber stateNumber = new StateNumber();
-        if (stateNumber.setStateNumber(fullStateNumber)) {
-            checkNull("stateNumberID", stateNumber.getId());
+        Optional<StateNumber> stateNumber = validator.parseStateNumber(fullStateNumber);
+
+        if (validator.parseStateNumber(fullStateNumber).isPresent()) {
+            checkNull("stateNumberID", stateNumber.get().getId());
             return stateNumberRepository.find(
-                    stateNumber.getCountry(),
-                    stateNumber.getRegionCode(),
-                    stateNumber.getSeries(),
-                    stateNumber.getNumber());
+                    stateNumber.get().getCountry(),
+                    stateNumber.get().getRegionCode(),
+                    stateNumber.get().getSeries(),
+                    stateNumber.get().getNumber());
         }
         return Optional.empty();
     }

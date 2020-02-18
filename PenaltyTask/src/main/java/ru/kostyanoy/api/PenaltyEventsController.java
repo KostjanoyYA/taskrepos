@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ru.kostyanoy.api.dto.ReportDto;
+import ru.kostyanoy.api.dto.PenaltyEventDto;
 import ru.kostyanoy.service.penaltyevents.PenaltyEventService;
 
 import java.util.List;
@@ -19,7 +19,7 @@ public class PenaltyEventsController {
     private final PenaltyEventService penaltyEventService;
 
     @GetMapping
-    public List<ReportDto> get(
+    public List<PenaltyEventDto> get(
             @RequestParam(name = Parameters.FIRST_NAME, required = false) String firstName,
             @RequestParam(name = Parameters.MIDDLE_NAME, required = false) String middleName,
             @RequestParam(name = Parameters.LAST_NAME, required = false) String lastName,

@@ -1,11 +1,11 @@
 package ru.kostyanoy.entity.statenumbervalidator;
 
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Bean;
 import ru.kostyanoy.entity.StateNumber;
 
 import java.util.Optional;
 
-@Component
+//@Component
 public class StateNumberValidatorRus implements StateNumberValidator {
     private final static int maxLength = 12;
     private final static int minLength = 12;
@@ -16,6 +16,7 @@ public class StateNumberValidatorRus implements StateNumberValidator {
     private static final int upperRegionCodeLimit = 999;
     private static final String country = "RUS";
 
+    @Bean
     @Override
     public Optional<StateNumber> parseStateNumber(String fullNumber) {
 
@@ -57,6 +58,7 @@ public class StateNumberValidatorRus implements StateNumberValidator {
         return Optional.of(stateNumber);
     }
 
+    @Bean
     private int parseNumericPart(String stringNumber, int upperLimit, int lowerLimit) {
         int result;
         try {

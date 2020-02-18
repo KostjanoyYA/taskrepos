@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
 
 @Value
 @Builder(builderClassName = "Builder", toBuilder = true)
-@JsonDeserialize(builder = ReportDto.Builder.class)
-public class ReportDto {
+@JsonDeserialize(builder = PenaltyEventDto.Builder.class)
+public class PenaltyEventDto {
 
     private final Long penaltyEventID;
 

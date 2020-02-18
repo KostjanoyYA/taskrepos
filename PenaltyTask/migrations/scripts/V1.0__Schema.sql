@@ -5,7 +5,7 @@ create schema if not exists pdbs;
 SET search_path TO pdbs;
 create table car_owner
 (
-    id         bigserial    not null,
+    id          bigserial    not null,
     first_name  varchar(256) not null,
     middle_name varchar(256) not null,
     last_name   varchar(256) not null
@@ -16,11 +16,11 @@ alter table car_owner
 
 create table state_number
 (
-    id         bigserial                not null,
-    country    varchar(3) DEFAULT 'RUS' not null,
+    id          bigserial                not null,
+    country     varchar(3) DEFAULT 'RUS' not null,
     region_code int                      not null,
-    series     varchar(3)               not null,
-    number     int                      not null
+    series      varchar(3)               not null,
+    number      int                      not null
 );
 
 alter table state_number
@@ -28,9 +28,9 @@ alter table state_number
 
 create table car
 (
-    id            bigserial    not null,
-    make          varchar(256) not null,
-    model         varchar(256) not null,
+    id              bigserial    not null,
+    make            varchar(256) not null,
+    model           varchar(256) not null,
     state_number_id bigint       not null,
     car_owner_id    bigint       not null
 );
@@ -57,7 +57,7 @@ alter table fine
 
 create table penalty_event
 (
-    id        bigserial not null,
+    id         bigserial not null,
     event_date timestamp not null,
     fine_id    bigint    not null,
     car_id     bigint    not null
@@ -88,12 +88,13 @@ alter table statistics
 
 --Triggers----------------------------------------------------------------------------
 
-CREATE OR REPLACE FUNCTION calculate_statistics() RETURNS TRIGGER AS $$
+CREATE OR REPLACE FUNCTION calculate_statistics() RETURNS TRIGGER AS
+$$
     --DECLARE
     --fine_occurrences bigint;
 
 BEGIN
-    IF  TG_OP = 'INSERT' THEN
+    IF TG_OP = 'INSERT' THEN
         UPDATE statistics
         SET fine_occurrences = fine_occurrences + 1
         WHERE fine_id = NEW.fine_id;
@@ -156,17 +157,21 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER t_statistics
-    AFTER INSERT OR UPDATE OR DELETE ON penalty_event FOR EACH ROW EXECUTE PROCEDURE calculate_statistics();
+    AFTER INSERT OR UPDATE OR DELETE
+    ON penalty_event
+    FOR EACH ROW
+EXECUTE PROCEDURE calculate_statistics();
 
 --------------------------------------------------------------------------------------------------
 
 
-CREATE OR REPLACE FUNCTION add_delete_fine_to_statistics() RETURNS TRIGGER AS $$
+CREATE OR REPLACE FUNCTION add_delete_fine_to_statistics() RETURNS TRIGGER AS
+$$
 DECLARE
     new_top_place bigint;
 
 BEGIN
-    IF  TG_OP = 'INSERT' THEN
+    IF TG_OP = 'INSERT' THEN
         new_top_place = (SELECT max(fine_top_place) FROM statistics);
 
         IF (SELECT count(fine_occurrences) FROM statistics WHERE fine_occurrences = 0) = 0 THEN
@@ -179,7 +184,8 @@ BEGIN
         RETURN NEW;
 
     ELSIF TG_OP = 'DELETE' THEN
-        DELETE FROM statistics
+        DELETE
+        FROM statistics
         WHERE fine_id = OLD.id;
 
         DROP TABLE IF EXISTS temp_rang_table;
@@ -199,7 +205,10 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER t_fine
-    AFTER INSERT OR DELETE ON fine FOR EACH ROW EXECUTE PROCEDURE add_delete_fine_to_statistics();
+    AFTER INSERT OR DELETE
+    ON fine
+    FOR EACH ROW
+EXECUTE PROCEDURE add_delete_fine_to_statistics();
 
 --Table fulfilment---------------------------------------------------
 
