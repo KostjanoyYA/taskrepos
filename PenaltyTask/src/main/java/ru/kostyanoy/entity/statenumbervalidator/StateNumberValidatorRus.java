@@ -71,10 +71,10 @@ public class StateNumberValidatorRus implements StateNumberValidator {
 
     @Override
     public String generateFullNumber(StateNumber stateNumber) {
-        return stateNumber.getSeries().charAt(0)
+        return stateNumber.getSeries().toUpperCase().charAt(0)
                 + String.format("%03d", stateNumber.getNumber())
-                + stateNumber.getSeries().substring(1)
+                + stateNumber.getSeries().toUpperCase().substring(1)
                 + String.format("%03d", stateNumber.getRegionCode())
-                + stateNumber.getCountry();
+                + stateNumber.getCountry().toUpperCase();
     }
 }

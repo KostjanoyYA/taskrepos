@@ -1,4 +1,4 @@
---TODO схему нужно создавать из под пользователя pdbs
+--TODO схему нужно создавать из-под пользователя pdbs
 -- psql -U pdbs penaltydb;
 
 create schema if not exists pdbs;

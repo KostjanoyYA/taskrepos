@@ -37,6 +37,7 @@ public class DefaultPenaltyEventService implements PenaltyEventService {
     @Transactional(readOnly = true)
     public List<PenaltyEventDto> get(String firstName, String middleName, String lastName, String fullStateNumber) {
         Optional<StateNumber> newStateNumber = getStateNumber(fullStateNumber);
+
         if (newStateNumber.isPresent()) {
             List<PenaltyEvent> penaltyEvents = penaltyEventRepository.find(newStateNumber.get().getId());
 
@@ -65,7 +66,7 @@ public class DefaultPenaltyEventService implements PenaltyEventService {
     private Optional<StateNumber> getStateNumber(String fullStateNumber) {
         Optional<StateNumber> stateNumber = validator.parseStateNumber(fullStateNumber);
 
-        if (validator.parseStateNumber(fullStateNumber).isPresent()) {
+        if (stateNumber.isPresent()) {
             checkNull("stateNumberID", stateNumber.get().getId());
             return stateNumberRepository.find(
                     stateNumber.get().getCountry(),

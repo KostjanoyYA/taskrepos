@@ -8,6 +8,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.kostyanoy.entity.PenaltyEvent;
+import ru.kostyanoy.entity.StateNumber;
+import ru.kostyanoy.entity.statenumbervalidator.StateNumberValidator;
 import ru.kostyanoy.testdata.TestDataProducer;
 
 import java.util.List;
@@ -17,17 +19,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class PenaltyEventRepositoryTest {
 
     @RunWith(SpringRunner.class)
-
     @DataJpaTest
     @Import(PenaltyEventRepository.class)
-    //@SpringBootTest
 
-    //https://stackoverflow.com/questions/41081589/datajpatest-needing-a-class-outside-the-test/41084739#41084739
-//https://mkyong.com/spring-boot/spring-boot-how-to-init-a-bean-for-testing/
-
-
-
-    public class EmployeeRepositoryIntegrationTest {
+    public class PenaltyEventRepositoryIntegrationTest {
 
         @Autowired
         private TestEntityManager entityManager;
@@ -35,12 +30,20 @@ public class PenaltyEventRepositoryTest {
         @Autowired
         private PenaltyEventRepository penaltyEventRepository;
 
+        @Autowired
+        private StateNumberValidator validator;
+
         @Test
         public void whenFindByNames_thenReturnEvents() {
             // given
+            int copyNumber = 5;
             PenaltyEvent penaltyEvent = TestDataProducer.createRandomPenaltyEvent();
-            entityManager.persist(penaltyEvent);
-            entityManager.flush();
+
+            for (int i = 0; i < copyNumber; i++) {
+                entityManager.persist(penaltyEvent);
+                entityManager.persist(TestDataProducer.createRandomPenaltyEvent());
+                entityManager.flush();
+            }
 
             // when
             List<PenaltyEvent> found = penaltyEventRepository.find(
@@ -48,7 +51,7 @@ public class PenaltyEventRepositoryTest {
                     penaltyEvent.getCar().getCarOwner().getFirstName(),
                     penaltyEvent.getCar().getCarOwner().getFirstName());
 
-            boolean result = !found.isEmpty();
+            boolean result = found != null && !found.isEmpty() && (found.size() == copyNumber);
             result = result &&
                     found.stream().allMatch((s) -> s.getCar().getCarOwner().getLastName()
                             .equals(penaltyEvent.getCar().getCarOwner().getLastName())) &&
@@ -56,6 +59,37 @@ public class PenaltyEventRepositoryTest {
                             .equals(penaltyEvent.getCar().getCarOwner().getFirstName())) &&
                     found.stream().allMatch((s) -> s.getCar().getCarOwner().getMiddleName()
                             .equals(penaltyEvent.getCar().getCarOwner().getMiddleName()));
+
+            // then
+            assertThat(result);
+        }
+
+        @Test
+        public void whenFindByStateNumberID_thenReturnEvents() {
+            // given
+            long copyNumber = 5;
+            PenaltyEvent penaltyEvent = TestDataProducer.createRandomPenaltyEvent();
+            penaltyEvent.getCar().getStateNumber().setId(copyNumber);
+            StateNumber stateNumber = penaltyEvent.getCar().getStateNumber();
+            StateNumber rndNumber;
+
+            for (int i = 0; i < copyNumber; i++) {
+                entityManager.persist(penaltyEvent);
+                rndNumber = TestDataProducer.createRandomStateNumber();
+                rndNumber.setId((long) i);
+                PenaltyEvent rndEvent = TestDataProducer.createRandomPenaltyEvent();
+                rndEvent.getCar().setStateNumber(rndNumber);
+                entityManager.persist(rndEvent);
+                entityManager.flush();
+            }
+
+            // when
+            List<PenaltyEvent> found = penaltyEventRepository.find(stateNumber.getId());
+
+            boolean result = found != null && !found.isEmpty() && (found.size() == copyNumber);
+            result = result &&
+                    found.stream().allMatch((s) -> s.getCar().getStateNumber().getId()
+                            .equals(penaltyEvent.getCar().getStateNumber().getId()));
 
             // then
             assertThat(result);

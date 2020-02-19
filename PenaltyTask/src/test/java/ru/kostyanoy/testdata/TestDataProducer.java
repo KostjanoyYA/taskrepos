@@ -4,14 +4,12 @@ import ru.kostyanoy.entity.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Random;
 
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 import static org.apache.commons.lang3.RandomStringUtils.randomNumeric;
 
 public class TestDataProducer {
-    public static final String API_ROOT = "http://localhost:8080";
-    public static final String STATISTICS = "/statistics";
-    public static final String PENALTYEVENTS = "/penaltyevents/";
 
     public static CarOwner createRandomCarOwner() {
         CarOwner carOwner = new CarOwner();
@@ -24,9 +22,17 @@ public class TestDataProducer {
     public static StateNumber createRandomStateNumber() {
         StateNumber stateNumber = new StateNumber();
         stateNumber.setCountry("RUS");
-        stateNumber.setRegionCode(Integer.valueOf(randomNumeric(3)));
-        stateNumber.setSeries(randomNumeric(3));
-        stateNumber.setNumber(Integer.valueOf(randomNumeric(3)));
+        stateNumber.setRegionCode(Integer.parseInt(randomNumeric(3)));
+
+        final String literals = "АВЕКМНОРСТУХ" + "ABEKMHOPCTYX";
+        Random rnd = new Random();
+        StringBuilder series = new StringBuilder();
+        for (int i = 0; i < 3; i++) {
+            series.append(literals.charAt(rnd.nextInt(literals.length())));
+        }
+        stateNumber.setSeries(series.toString());
+
+        stateNumber.setNumber(Integer.parseInt(randomNumeric(3)));
         return stateNumber;
     }
 
@@ -61,23 +67,4 @@ public class TestDataProducer {
         statistics.setFine(createRandomFine());
         return statistics;
     }
-
-    /*private String createPenaltyEventAsUri(PenaltyEvent penaltyEvent) {
-        Response response = RestAssured.given()
-                .log().body()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(penaltyEvent)
-                .post(ru.kostyanoy.testdata.TestDataProducer.API_ROOT);
-        return ru.kostyanoy.testdata.TestDataProducer.API_ROOT + "/" + response.jsonPath().get(); //TODO ???
-    }
-
-    private String createStatisticsAsUri(Statistics statistics) {
-        Response response = RestAssured.given()
-                .log().body()
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .body(statistics)
-                .post(ru.kostyanoy.testdata.TestDataProducer.API_ROOT);
-        return ru.kostyanoy.testdata.TestDataProducer.API_ROOT + "/" + response.jsonPath().get(); //TODO ???
-    }*/
-
 }

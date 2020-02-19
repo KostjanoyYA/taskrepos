@@ -16,9 +16,9 @@ public interface PenaltyEventRepository extends JpaRepository<PenaltyEvent, Long
                     "join fetch p.car ";
     String GET_BY_OWNER_NAME_QUERY =
             GET_QUERY +
-                    " where lower(p.car.carOwner.lastName) like lower(concat('%', :lastName, '%'))" +
-                    " and lower(p.car.carOwner.firstName) like lower(concat('%', :firstName, '%'))" +
-                    " and lower(p.car.carOwner.middleName) like lower(concat('%', :middleName, '%'))";
+                    " where upper(p.car.carOwner.lastName) like upper(concat('%', :lastName, '%'))" +
+                    " and upper(p.car.carOwner.firstName) like upper(concat('%', :firstName, '%'))" +
+                    " and upper(p.car.carOwner.middleName) like upper(concat('%', :middleName, '%'))";
 
     String GET_BY_STATENUMBER_QUERY =
             GET_QUERY +
