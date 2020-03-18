@@ -1,7 +1,7 @@
---TODO схему нужно создавать из-под пользователя pdbs
--- psql -U pdbs penaltydb;
 
-create schema if not exists pdbs;
+\connect penaltydb;
+
+create schema if not exists pdbs AUTHORIZATION pdbs;
 SET search_path TO pdbs;
 create table car_owner
 (
@@ -14,6 +14,9 @@ create table car_owner
 alter table car_owner
     add constraint carOwner_pk primary key (id);
 
+alter table car_owner
+    owner to pdbs;
+
 create table state_number
 (
     id          bigserial                not null,
@@ -25,6 +28,9 @@ create table state_number
 
 alter table state_number
     add constraint stateNumber_pk primary key (id);
+
+alter table state_number
+    owner to pdbs;
 
 create table car
 (
@@ -44,6 +50,9 @@ alter table car
 alter table car
     add constraint car_carOwner_id_fk foreign key (car_owner_id) references car_owner (id);
 
+alter table car
+    owner to pdbs;
+
 
 create table fine
 (
@@ -54,6 +63,9 @@ create table fine
 
 alter table fine
     add constraint fine_pk primary key (id);
+
+alter table fine
+    owner to pdbs;
 
 create table penalty_event
 (
@@ -72,10 +84,13 @@ alter table penalty_event
 alter table penalty_event
     add constraint penaltyEvent_car_id_fk foreign key (car_id) references car (id);
 
+alter table penalty_event
+    owner to pdbs;
+
 create table statistics
 (
     id               bigserial not null,
-    fine_top_place   bigint    not null,
+    fine_top_place   bigint,
     fine_occurrences bigint    not null default 0,
     fine_id          bigint    not null
 );
@@ -85,6 +100,9 @@ alter table statistics
 
 alter table statistics
     add constraint statistics_fine_id_fk foreign key (fine_id) references fine (id);
+
+alter table statistics
+    owner to pdbs;
 
 --Triggers----------------------------------------------------------------------------
 
